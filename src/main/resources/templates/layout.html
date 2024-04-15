@@ -1,84 +1,17 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-    <head th:fragment="headerFragment">
-        <link rel="stylesheet" th:href="@{/css/style.css}">
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Customer Portal</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-        <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
-    </head>
+<head th:fragment="headerFragment">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Customer Portal</title>
+    <link
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+            crossorigin="anonymous"></link>
+    <link
+            href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css"
+            rel="stylesheet"></link>
+</head>
 
-    <body>
-
-        <div th:fragment="headerFragment" class="header">
-            <!-- Navigation -->
-            <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">                <div class="container">
-                    <a class="navbar-brand" href="#">
-                        <img src="/static/images/logo.png" alt="Logo" style="width:40px;"> <!-- Ajout du logo ici -->
-                        isquare.digital
-                    </a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav ml-auto">
-                            <li class="nav-item active">
-                                <a class="nav-link" href="#">Accueil</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/about">À propos</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/service">Services</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/contact">Contact</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/customers">Customers</a>
-                            </li>
-                        </ul>
-                        <ul class="navbar-nav ml-auto">
-                            <li class="nav-item" th:if="${isAuthenticated}">
-                                <a class="nav-link" href="/logout">Logout</a>
-                            </li>
-                            <li class="nav-item" th:if="${!isAuthenticated}">
-                                <a class="nav-link" href="/oauth2/authorization/keycloak">Sign In</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-        </div>
-
-        <div th:fragment="footerFragment" class="footer bg-light">
-            <div class="container bg-light py-5">
-                <div class="row">
-                    <div class="col-md-4">
-                        <h5>À propos</h5>
-                        <p class="text-muted">isquare.digital est une entreprise leader dans le domaine de l'IT. Nous nous spécialisons dans le développement d'applications web robustes et sécurisées. Notre équipe d'experts utilise une variété de technologies, y compris Java et Spring Boot, pour créer des solutions personnalisées qui répondent aux besoins spécifiques de nos clients. Ce portail client est un exemple de notre engagement à fournir des produits de haute qualité qui améliorent l'efficacité et la productivité de nos clients.</p>
-                    </div>
-                    <div class="col-md-4">
-                        <h5>Liens utiles</h5>
-                        <ul class="list-unstyled text-muted">
-                            <li><a href="/contact">Contact</a></li>
-                            <li><a href="/about">À propos</a></li>
-                            <li><a href="/privacy">Politique de confidentialité</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-4">
-                        <h5>Contactez-nous</h5>
-                        <p class="text-muted">Ile de France, Paris</p>
-                        <p class="text-muted">Email: info@isquare.digital</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <p class="text-muted text-center small py-4 mb-0">&copy; 2024 Isquare.digital. Tous les droits sont réservés.</p>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </body>
-</html>
+<div id="pagefoot" th:fragment="footerFragment">
+    <p>Document last modified 2017/10/23.</p>
+    <p>Copyright: Lorem Ipsum</p>
+</div>

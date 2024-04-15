@@ -1,45 +1,34 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="layout :: headerFragment">
-</head>
-<body>
-
-<div id="mainContainer" class="container mt-5">
-    <h1 class="my-4">Customers</h1>
-    <h2 class="custom-h2">
-        Hello, <span th:text="${username}">--name--</span>.
-    </h2>
-    <a href="/customers/new" class="btn btn-primary mb-4">Add New Customer</a>
-    <table class="table table-striped table-hover">
-        <thead class="thead-dark">
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Address</th>
-            <th>Service Rendered</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="customer : ${customers}">
-            <td th:text="${customer.id}">Text ...</td>
-            <td th:text="${customer.name}">Text ...</td>
-            <td th:text="${customer.email}">Text ...</td>
-            <td th:text="${customer.address}">Text ...</td>
-            <td th:text="${customer.serviceRendered}">Text...</td>
-            <td>
-                <a th:href="@{/customers/edit/{id}(id=${customer.id})}" class="btn btn-info">Edit</a>
-                <a th:href="@{/customers/delete/{id}(id=${customer.id})}" class="btn btn-danger">Delete</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    <div id="pagefoot" th:include="layout :: footerFragment">Footer
+    <head th:include="layout :: headerFragment">
+    </head>
+    <body>
+    <div id="container">
+        <h1>
+            Hello, <span th:text="${username}">--name--</span>.
+        </h1>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Service Rendered</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="customer : ${customers}">
+                <td th:text="${customer.id}">Text ...</td>
+                <td th:text="${customer.name}">Text ...</td>
+                <td th:text="${customer.address}">Text ...</td>
+                <td th:text="${customer.serviceRendered}">Text...</td>
+            </tr>
+            </tbody>
+        </table>
+        <div id="pagefoot" th:include="layout :: footerFragment">Footer
+        </div>
+        <a href="/logout">Logout</a>
     </div>
-    <a href="/logout" class="btn btn-secondary mt-4">Logout</a>
-
-</div>
-<!-- container -->
-</body>
+    <!-- container -->
+    </body>
 </html>

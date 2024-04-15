@@ -1,7 +1,5 @@
 package digital.isquare.oauthclient.controller;
 
-import digital.isquare.oauthclient.config.properties.ApplicationProperties;
-import digital.isquare.oauthclient.config.properties.KeycloakProperties;
 import digital.isquare.oauthclient.service.CustomRestTemplate;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -35,11 +33,6 @@ class HelloControllerTest {
     @Autowired
     private CustomRestTemplate customRestTemplate;
 
-    @Autowired
-    private KeycloakProperties keycloakProperties;
-    @Autowired
-    private ApplicationProperties applicationProperties;
-
     private String accessToken;
 
     @BeforeEach
@@ -71,15 +64,15 @@ class HelloControllerTest {
 
     private void getAccessToken() {
         String urlParam = "/protocol/openid-connect/token";
-        String url = keycloakProperties.getProvider().getKeycloak().getIssuerUri().concat(urlParam);
+        String url = "http://localhost:8180/auth/realms/Keycloak_SpringBoot".concat(urlParam);
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("client_id", keycloakProperties.getRegistration().getKeycloak().getClientId());
-        params.add("client_secret", keycloakProperties.getRegistration().getKeycloak().getClientSecret());
-        params.add("username", applicationProperties.getAuth().getUsername());
-        params.add("password", applicationProperties.getAuth().getPassword());
-        params.add("grant_type", applicationProperties.getAuth().getGrantType());
-        params.add("scope", keycloakProperties.getRegistration().getKeycloak().getScope());
+        params.add("client_id", "springboot-openid-client-app");
+        params.add("client_secret", "TlOjOmy4vEQbPsKjMqV009wYHdlGaIG2");
+        params.add("username", "my-user");
+        params.add("password", "my-password");
+        params.add("grant_type", "password");
+        params.add("scope", "openid");
 
         ResponseEntity<Map> responseEntity = customRestTemplate.post(url, params, Map.class);
         Map<String, String> response = responseEntity.getBody();

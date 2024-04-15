@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.nimbusds.openid.connect.sdk.claims.UserInfo;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -18,7 +17,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
-import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2UserAuthority;
 import org.springframework.security.web.SecurityFilterChain;
@@ -56,31 +54,18 @@ class SecurityConfig {
         return new HttpSessionEventPublisher();
     }
 
-
     @Bean
     public SecurityFilterChain resourceServerFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
                 // Allows preflight requests from browser
-                .requestMatchers(new AntPathRequestMatcher("/api/public"))
+                .requestMatchers(new AntPathRequestMatcher("/api/public*"))
                 .permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/customers*", HttpMethod.OPTIONS.name()))
+                .permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/customers*"))
+                .hasRole("user")
                 .requestMatchers(new AntPathRequestMatcher("/"))
                 .permitAll()
-                .requestMatchers(new AntPathRequestMatcher("/about"))
-                .permitAll()
-                .requestMatchers(new AntPathRequestMatcher("/contact"))
-                .permitAll()
-                .requestMatchers(new AntPathRequestMatcher("/service"))
-                .permitAll()
-                .requestMatchers(new AntPathRequestMatcher("/privacy"))
-                .permitAll()
-                .requestMatchers(new AntPathRequestMatcher("/static/images/**"))
-                .permitAll()
-                .requestMatchers(new AntPathRequestMatcher("/static/css/**"))
-                .permitAll()
-                .requestMatchers(new AntPathRequestMatcher("/customers/**", HttpMethod.OPTIONS.name()))
-                .permitAll()
-                .requestMatchers(new AntPathRequestMatcher("/customers/**"))
-                .hasRole("user")
                 .anyRequest()
                 .authenticated());
         http.oauth2ResourceServer(oauth2 -> oauth2
@@ -91,7 +76,6 @@ class SecurityConfig {
         return http.build();
     }
 
-
     @Bean
     public GrantedAuthoritiesMapper userAuthoritiesMapperForKeycloak() {
         return authorities -> {
@@ -100,14 +84,14 @@ class SecurityConfig {
             boolean isOidc = authority instanceof OidcUserAuthority;
 
             if (isOidc) {
-                OidcUserAuthority oidcUserAuthority = (OidcUserAuthority) authority;
-                OidcUserInfo userInfo = oidcUserAuthority.getUserInfo();
+                var oidcUserAuthority = (OidcUserAuthority) authority;
+                var userInfo = oidcUserAuthority.getUserInfo();
 
                 // Tokens can be configured to return roles under
                 // Groups or REALM ACCESS hence have to check both
                 if (userInfo.hasClaim(REALM_ACCESS_CLAIM)) {
-                    Map<String, Object> realmAccess = userInfo.getClaimAsMap(REALM_ACCESS_CLAIM);
-                    Collection<String> roles = (Collection<String>) realmAccess.get(ROLES_CLAIM);
+                    var realmAccess = userInfo.getClaimAsMap(REALM_ACCESS_CLAIM);
+                    var roles = (Collection<String>) realmAccess.get(ROLES_CLAIM);
                     mappedAuthorities.addAll(generateAuthoritiesFromClaim(roles));
                 } else if (userInfo.hasClaim(GROUPS)) {
                     Collection<String> roles = userInfo.getClaim(GROUPS);
