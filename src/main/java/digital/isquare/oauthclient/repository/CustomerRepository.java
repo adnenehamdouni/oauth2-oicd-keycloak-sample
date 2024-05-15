@@ -1,8 +1,7 @@
 package digital.isquare.oauthclient.repository;
 
-import digital.isquare.oauthclient.entity.Customer;
+import digital.isquare.oauthclient.model.entity.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;

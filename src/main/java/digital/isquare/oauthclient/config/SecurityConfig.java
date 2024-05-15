@@ -1,17 +1,18 @@
 package digital.isquare.oauthclient.config;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import digital.isquare.oauthclient.config.handler.KeycloakLogoutHandler;
+import digital.isquare.oauthclient.config.handler.OAuth2LoginSuccessHandler;
+import digital.isquare.oauthclient.config.interceptor.SecurityInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
@@ -22,8 +23,11 @@ import org.springframework.security.oauth2.core.user.OAuth2UserAuthority;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -56,23 +60,41 @@ class SecurityConfig {
 
     @Bean
     public SecurityFilterChain resourceServerFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(auth -> auth
-                // Allows preflight requests from browser
-                .requestMatchers(new AntPathRequestMatcher("/api/public*"))
-                .permitAll()
-                .requestMatchers(new AntPathRequestMatcher("/customers*", HttpMethod.OPTIONS.name()))
-                .permitAll()
-                .requestMatchers(new AntPathRequestMatcher("/customers*"))
-                .hasRole("user")
-                .requestMatchers(new AntPathRequestMatcher("/"))
-                .permitAll()
-                .anyRequest()
-                .authenticated());
+
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.applyPermitDefaultValues();
+        corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfiguration);
+
+        http.cors(cors -> cors.configurationSource(source))
+                .authorizeHttpRequests(auth -> auth
+                    // Allows preflight requests from browser
+                        .requestMatchers(new AntPathRequestMatcher("/api/public*"))
+                        .permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/auth/login*"))
+                        .permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/auth/logout*"))
+                        .permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/customers*", HttpMethod.OPTIONS.name()))
+                        .permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/customers*"))
+                        .hasRole("user")
+                        .requestMatchers(new AntPathRequestMatcher("/"))
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated());
         http.oauth2ResourceServer(oauth2 -> oauth2
                 .jwt(Customizer.withDefaults()));
         http.oauth2Login(oauth2 -> oauth2
                         .successHandler(new OAuth2LoginSuccessHandler())) // Utiliser le gestionnaire de succès personnalisé
                 .logout(logout -> logout.addLogoutHandler(keycloakLogoutHandler).logoutSuccessUrl("/"));
+
+        http.csrf(AbstractHttpConfigurer::disable);
+        // Ajoutez l'intercepteur de sécurité
+        http.addFilterBefore(new SecurityInterceptor(), SecurityContextPersistenceFilter.class);
+
         return http.build();
     }
 

@@ -1,5 +1,5 @@
 package digital.isquare.oauthclient.service;
-import digital.isquare.oauthclient.entity.Customer;
+import digital.isquare.oauthclient.model.entity.Customer;
 import digital.isquare.oauthclient.repository.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package digital.isquare.oauthclient.entity;
+package digital.isquare.oauthclient.model.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

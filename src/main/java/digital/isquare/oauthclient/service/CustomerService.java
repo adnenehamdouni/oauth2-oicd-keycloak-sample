@@ -1,6 +1,6 @@
 package digital.isquare.oauthclient.service;
 
-import digital.isquare.oauthclient.entity.Customer;
+import digital.isquare.oauthclient.model.entity.Customer;
 
 import java.util.List;
 import java.util.Optional;

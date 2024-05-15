@@ -1,7 +1,6 @@
 package digital.isquare.oauthclient.repository;
 
-import digital.isquare.oauthclient.entity.Customer;
-import digital.isquare.oauthclient.repository.CustomerRepository;
+import digital.isquare.oauthclient.model.entity.Customer;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

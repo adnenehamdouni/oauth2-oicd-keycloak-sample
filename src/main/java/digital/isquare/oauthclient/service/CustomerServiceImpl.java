@@ -1,6 +1,6 @@
 package digital.isquare.oauthclient.service;
 
-import digital.isquare.oauthclient.entity.Customer;
+import digital.isquare.oauthclient.model.entity.Customer;
 import digital.isquare.oauthclient.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

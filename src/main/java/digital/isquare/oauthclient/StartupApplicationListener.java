@@ -1,6 +1,6 @@
 package digital.isquare.oauthclient;
 
-import digital.isquare.oauthclient.entity.Customer;
+import digital.isquare.oauthclient.model.entity.Customer;
 import digital.isquare.oauthclient.service.CustomerService;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
